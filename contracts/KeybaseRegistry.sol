@@ -54,7 +54,7 @@ contract KeybaseRegistry is usingOraclize {
     oracleRequests[myid].registered = true;
   }
 
-  function keybasePubURL(string memory username) private constant returns (string) {
+  function keybasePubURL(string memory username) constant returns (string) {
     string memory protocol = "https://";
     string memory url = '.keybase.pub/eth';
 
