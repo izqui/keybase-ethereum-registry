@@ -87,11 +87,11 @@ contract KeybaseRegistry is usingOraclize {
   }
 
   function proofString(string username, address ethAddress) constant returns (string) {
-    return strConcat('I am ', username, ' on Keybase verifying my Ethereum address ', toString(ethAddress), ' by signing this proof with its private key');
+    return strConcat('I am ', username, ' on Keybase verifying my Ethereum address ', addressToString(ethAddress), ' by signing this proof with its private key');
   }
 
   function testMyString() constant returns (string) {
-    return toString(msg.sender);
+    return addressToString(msg.sender);
   }
 
   function checkSignature(string username, address ethAddress, string signature) returns (address) {
@@ -100,9 +100,18 @@ contract KeybaseRegistry is usingOraclize {
     return ecrecover(signedPayload(username, ethAddress), v, r, s);
   }
 
+  function hashingPayload(string username, address ethAddress) returns (string payload) {
+    string memory proof = proofString(username, ethAddress);
+    if (isLegacySignature) {
+      payload = proof;
+    } else {
+      payload = strConcat("\x19Ethereum Signed Message:\n32", bytesToString(uint(keccak256(proofString(username, ethAddress))), 32));
+    }
+  }
+
   function signedPayload(string username, address ethAddress) returns (bytes32) {
     // TODO: Ethereum signed message thingy
-    return keccak256(proofString(username, ethAddress));
+    return keccak256(hashingPayload(username, ethAddress));
   }
 
   function getSignatureBytes(string hexString) constant returns (bytes32, bytes32, uint8) {
@@ -134,10 +143,14 @@ contract KeybaseRegistry is usingOraclize {
     else return byte(uint8(char) - 0x30);
   }
 
-  function toString(address x) returns (string) {
-    bytes memory s = new bytes(40);
-    for (uint i = 0; i < 20; i++) {
-      byte b = byte(uint8(uint(x) / (2**(8*(19 - i)))));
+  function addressToString(address x) returns (string) {
+    return bytesToString(uint(x), 20);
+  }
+
+  function bytesToString(uint x, uint length) returns (string) {
+    bytes memory s = new bytes(length * 2);
+    for (uint i = 0; i < length; i++) {
+      byte b = byte(uint8(uint(x) / (2**(8*(length - 1 - i)))));
       byte hi = byte(uint8(b) / 16);
       byte lo = byte(uint8(b) - 16 * uint8(hi));
       s[2*i] = char(hi);

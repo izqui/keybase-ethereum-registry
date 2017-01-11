@@ -1,5 +1,5 @@
 module.exports = function(deployer) {
   //deployer.deploy(HelperLib);
   //deployer.autolink();
-  deployer.deploy(KeybaseRegistry, '_dev', true, false);
+  deployer.deploy(KeybaseRegistry, '_dev', true, true);
 };
