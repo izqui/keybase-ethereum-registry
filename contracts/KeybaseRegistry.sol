@@ -1,11 +1,14 @@
 pragma solidity ^0.4.6;
 
 import "./OraclizeI.sol";
+import "./BytesHelper.sol";
 
 contract KeybaseRegistry is usingOraclize {
+  using BytesHelper for *;
+
   string fileSuffix; // _ropsten, _privatechain, etc... Empty for mainnet
   bool addVBase; // whether it is needed to add 27 or not
-  bool isLegacySignature;
+  bool isLegacySignature; // whether adding 'Ethereum signed messgae:...'
 
   mapping (address => string) private usernames;
   mapping (string => address) private addresses;
@@ -86,18 +89,14 @@ contract KeybaseRegistry is usingOraclize {
     return strConcat(protocol, username, url, fileSuffix, ext);
   }
 
-  function proofString(string username, address ethAddress) constant returns (string) {
-    return strConcat('I am ', username, ' on Keybase verifying my Ethereum address ', addressToString(ethAddress), ' by signing this proof with its private key');
-  }
-
-  function testMyString() constant returns (string) {
-    return addressToString(msg.sender);
-  }
-
   function checkSignature(string username, address ethAddress, string signature) returns (address) {
     var (r, s, v) = getSignatureBytes(signature);
 
     return ecrecover(signedPayload(username, ethAddress), v, r, s);
+  }
+
+  function signedPayload(string username, address ethAddress) returns (bytes32) {
+    return keccak256(hashingPayload(username, ethAddress));
   }
 
   function hashingPayload(string username, address ethAddress) returns (string payload) {
@@ -105,74 +104,19 @@ contract KeybaseRegistry is usingOraclize {
     if (isLegacySignature) {
       payload = proof;
     } else {
-      payload = strConcat("\x19Ethereum Signed Message:\n32", bytesToString(uint(keccak256(proofString(username, ethAddress))), 32));
+      uint hashBytes = uint(keccak256(proofString(username, ethAddress)));
+      // payload = strConcat("\x19Ethereum Signed Message:\n32", strConcat('0x', hashBytes.toASCIIString(32)));
     }
   }
 
-  function signedPayload(string username, address ethAddress) returns (bytes32) {
-    // TODO: Ethereum signed message thingy
-    return keccak256(hashingPayload(username, ethAddress));
+  function proofString(string username, address ethAddress) constant returns (string) {
+    return strConcat('I am ', username, ' on Keybase verifying my Ethereum address ', strConcat('0x', ethAddress.toASCIIString()), ' by signing this proof with its private key');
   }
 
-  function getSignatureBytes(string hexString) constant returns (bytes32, bytes32, uint8) {
-    return (strToHex(hexString, 2), strToHex(hexString, 66), getV(hexString, 130));
-  }
-
-  function strToHex(string hexString, uint startIndex) returns (bytes32 b) {
-    bytes memory str = bytes(hexString);
-    bytes memory bs = new bytes(32);
-    uint maxIndex = ((str.length - startIndex) < 64 ? (str.length - startIndex) : startIndex + 64);
-
-    for (uint i = startIndex; i < maxIndex; i++) {
-      uint ii = i - startIndex;
-      bs[ii / 2] = byte(uint8(bs[ii / 2]) + (uint8(toByte(str[i])) * uint8(16 ** (1 - (ii % 2)))));
-    }
-
-    for (uint x = 0; x < 32; x++) {
-        b = bytes32(uint(b) + uint(uint(bs[x]) * (2 ** (8 * (31 - x)))));
-    }
-  }
-
-  function getV(string hexString, uint startIndex) returns (uint8) {
-    bytes memory str = bytes(hexString);
-    return uint8(addVBase ? 27 : 0) + uint8(16 * uint8(toByte(str[startIndex])) + uint8(toByte(str[startIndex + 1])));
-  }
-
-  function toByte(byte char) returns (byte c) {
-    if (uint8(char) > 0x57) return byte(uint8(char) - 0x57);
-    else return byte(uint8(char) - 0x30);
-  }
-
-  function addressToString(address x) returns (string) {
-    return bytesToString(uint(x), 20);
-  }
-
-  function bytesToString(uint x, uint length) returns (string) {
-    bytes memory s = new bytes(length * 2);
-    for (uint i = 0; i < length; i++) {
-      byte b = byte(uint8(uint(x) / (2**(8*(length - 1 - i)))));
-      byte hi = byte(uint8(b) / 16);
-      byte lo = byte(uint8(b) - 16 * uint8(hi));
-      s[2*i] = char(hi);
-      s[2*i+1] = char(lo);
-    }
-
-    return strConcat('0x', string(s));
-  }
-
-  function char(byte b) returns (byte c) {
-    if (b < 10) return byte(uint8(b) + 0x30);
-    else return byte(uint8(b) + 0x57);
-  }
-
-  function lowercaseString(string self) internal constant returns (string) {
-    bytes memory a = bytes(self);
-    for (uint i = 0; i < a.length; i++) {
-      if (uint8(a[i]) >= 0x41 && uint8(a[i]) <= 0x5A) {
-       a[i] = byte(uint8(a[i]) + 0x20);
-      }
-    }
-    return string(a);
+  function getSignatureBytes(string hexString) constant returns (bytes32 r, bytes32 s, uint8 v) {
+    r = hexString.toBytes32(2);
+    s = hexString.toBytes32(66);
+    v = uint8(addVBase ? 27 : 0) + uint8(hexString.toBytes(130, 1)[0]);
   }
 
   function () { throw; }
