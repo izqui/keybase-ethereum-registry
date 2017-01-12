@@ -105,7 +105,7 @@ contract KeybaseRegistry is usingOraclize {
       payload = proof;
     } else {
       uint hashBytes = uint(keccak256(proofString(username, ethAddress)));
-      // payload = strConcat("\x19Ethereum Signed Message:\n32", strConcat('0x', hashBytes.toASCIIString(32)));
+      payload = strConcat("\x19Ethereum Signed Message:\n32", strConcat('0x', hashBytes.toASCIIString(32)));
     }
   }
 
