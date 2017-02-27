@@ -22,12 +22,20 @@ contract KeybaseResolver is KeybaseRegistry {
 
   function processSuccessfulRequest(KeybaseRegistry.RegisterRequest request) internal {
     super.processSuccessfulRequest(request);
-    resolverAddresses[sha3(namehash, request.username)] = request.requester;
-    resolverNames[sha3(namehash, request.requester)] = request.username;
+    bytes32 addressNode = sha3(namehash, request.username);
+    bytes32 nodeName = sha3(namehash, request.requester);
+
+    resolverAddresses[addressNode] = request.requester;
+    resolverNames[nodeName] = request.username;
+
+    AddrChanged(addressNode, request.requester);
+    NameChanged(nodeName, request.username);
   }
 
   bytes32 namehash;
   mapping (bytes32 => address) resolverAddresses;
   mapping (bytes32 => string) resolverNames;
+
   event AddrChanged(bytes32 indexed node, address a);
+  event NameChanged(bytes32 indexed node, string n);
 }
