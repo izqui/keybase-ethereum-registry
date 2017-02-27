@@ -1,5 +1,7 @@
 # Keybase <> Ethereum Registry
 
+[![NPM Package](https://img.shields.io/npm/v/keybase-eth.svg?style=flat-square)](https://www.npmjs.org/package/keybase-eth)
+
 Mapping Keybase identities with Ethereum addresses in a secure, cryptographically verifiable manner.
 
 A project by [Aragon](https://aragon.one) to provide Ethereum identity.
