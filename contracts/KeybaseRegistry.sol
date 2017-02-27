@@ -22,9 +22,8 @@ contract KeybaseRegistry is usingOraclize {
 
   mapping (bytes32 => RegisterRequest) internal oracleRequests;
 
-  function KeybaseRegistry(string _suffix, bool _addVBase, bool _isLegacySignature) {
+  function KeybaseRegistry(string _suffix, bool _isLegacySignature) {
     fileSuffix = _suffix;
-    addVBase = _addVBase;
     isLegacySignature = _isLegacySignature;
   }
 
@@ -49,7 +48,7 @@ contract KeybaseRegistry is usingOraclize {
     oracleRequests[requestId] = RegisterRequest({username: username, requester: ethAddress, registered: false, signature: ""});
   }
 
-  function processRequest(RegisterRequest request) private {
+  function processSuccessfulRequest(RegisterRequest request) internal {
     var oldUsername = usernames[addresses[request.username]];
     usernames[addresses[request.username]] = '';
     addresses[oldUsername] = 0x0;
@@ -67,7 +66,7 @@ contract KeybaseRegistry is usingOraclize {
     if (checkSignature(request.username, request.requester, result) != request.requester) // result not equals requester address
         throw;
 
-    processRequest(request);
+    processSuccessfulRequest(request);
     oracleRequests[myid].registered = true;
     oracleRequests[myid].signature = result; // Save request signature for posterity
   }
@@ -116,7 +115,9 @@ contract KeybaseRegistry is usingOraclize {
   function getSignatureBytes(string hexString) constant returns (bytes32 r, bytes32 s, uint8 v) {
     r = hexString.toBytes32(2);
     s = hexString.toBytes32(66);
-    v = uint8(addVBase ? 27 : 0) + uint8(hexString.toBytes(130, 1)[0]);
+    v = uint8(hexString.toBytes(130, 1)[0]);
+
+    if (v < 2) v += 27; // some clients will send an outdated signature
   }
 
   function () payable {
