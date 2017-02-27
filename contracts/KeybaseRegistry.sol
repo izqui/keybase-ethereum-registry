@@ -40,7 +40,7 @@ contract KeybaseRegistry is usingOraclize {
     return getUsername(msg.sender);
   }
 
-  function register(string username) public payable {
+  function registerSender(string username) public payable {
     return register(username, msg.sender);
   }
 
@@ -119,5 +119,7 @@ contract KeybaseRegistry is usingOraclize {
     v = uint8(addVBase ? 27 : 0) + uint8(hexString.toBytes(130, 1)[0]);
   }
 
-  function () { throw; }
+  function () payable {
+    // Anyone can add funds to pay for oraclize
+  }
 }
