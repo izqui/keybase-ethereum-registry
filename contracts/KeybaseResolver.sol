@@ -20,8 +20,11 @@ contract KeybaseResolver is KeybaseRegistry {
     return resolverNames[node];
   }
 
-  function processSuccessfulRequest(KeybaseRegistry.RegisterRequest request) internal {
-    super.processSuccessfulRequest(request);
+  function processSuccessfulRequest(KeybaseRegistry.RegisterRequest request) internal returns (string oldUsername, address oldAddress) {
+    (oldUsername, oldAddress) = super.processSuccessfulRequest(request);
+    resolverAddresses[sha3(namehash, oldUsername)] = 0x0;
+    resolverNames[sha3(namehash, oldAddress)] = '';
+
     bytes32 addressNode = sha3(namehash, request.username);
     bytes32 nodeName = sha3(namehash, request.requester);
 

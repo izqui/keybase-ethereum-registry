@@ -48,9 +48,11 @@ contract KeybaseRegistry is usingOraclize {
     oracleRequests[requestId] = RegisterRequest({username: username, requester: ethAddress, registered: false, signature: ""});
   }
 
-  function processSuccessfulRequest(RegisterRequest request) internal {
-    var oldUsername = usernames[addresses[request.username]];
-    usernames[addresses[request.username]] = '';
+  function processSuccessfulRequest(RegisterRequest request) internal returns (string oldUsername, address oldAddress) {
+    oldUsername = usernames[addresses[request.username]];
+    oldAddress = addresses[request.username];
+    
+    usernames[oldAddress] = '';
     addresses[oldUsername] = 0x0;
     usernames[request.requester] = request.username;
     addresses[request.username] = request.requester;
