@@ -1,6 +1,6 @@
 {
   "name": "keybase-eth",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Read the [article](https://medium.com/@izqui9/ethereum-keybase-registry-proposal-c6497e3b2af7)",
   "main": "truffle.js",
   "scripts": {
