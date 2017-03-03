@@ -406,12 +406,12 @@
         }
       },
       "links": {
-        "BytesHelper": "0x6ecae6d3d1a4e8f5d8a9a81d23cae73809cfba83"
+        "BytesHelper": "0x37137ea0e0629f77b9bd2fa8d1d5c7bd9d08b1ec"
       },
-      "address": "0xc6cd7919f461a670a18e870c7ffc8a20364d4feb",
-      "updated_at": 1488224803386
+      "address": "0x2726ada2aa7470929b7df4819f91a9078a134313",
+      "updated_at": 1488535839602
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1488285198515
+  "updated_at": 1488535839602
 }
