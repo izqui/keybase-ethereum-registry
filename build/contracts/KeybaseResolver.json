@@ -410,8 +410,51 @@
       },
       "address": "0x2726ada2aa7470929b7df4819f91a9078a134313",
       "updated_at": 1488535839602
+    },
+    "42": {
+      "events": {
+        "0x52d7d861f09ab3d26239d492e8968629f95e9e318cf0b73bfddc441522a15fd2": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "node",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "a",
+              "type": "address"
+            }
+          ],
+          "name": "AddrChanged",
+          "type": "event"
+        },
+        "0xb7d29e911041e8d9b843369e890bcb72c9388692ba48b65ac54e7214c4c348f7": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "node",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "n",
+              "type": "string"
+            }
+          ],
+          "name": "NameChanged",
+          "type": "event"
+        }
+      },
+      "links": {
+        "BytesHelper": "0x5dbe961ab25bef2ea5fb996a2c1810d39092b3f4"
+      },
+      "address": "0xc36441ae7c3243399f5d273330ecc7e30db8953a",
+      "updated_at": 1488803780726
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1488535839602
+  "updated_at": 1488803780726
 }
