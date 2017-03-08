@@ -470,12 +470,12 @@
         }
       },
       "links": {
-        "BytesHelper": "0xd01826941ca4d73b4ad87c6f8a7a77ee23656827"
+        "BytesHelper": "0x5f70c2a054e78ea3fbb169fbe218c003a9b1c070"
       },
-      "address": "0xea9103d5720b51e8e14f77c800b5f1b97c6d7224",
-      "updated_at": 1488986985169
+      "address": "0xff00aa6199bd43dd5d46e02ae390e14830c79039",
+      "updated_at": 1488988645149
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1488986985169
+  "updated_at": 1488988645149
 }
