@@ -7,7 +7,7 @@ Mapping Keybase identities with Ethereum addresses in a secure, cryptographicall
 A project by [Aragon](https://aragon.one) to provide Ethereum identity.
 
 Ropsten (deployed Feb 27th, 2017): [0x18feabc5f9437676143df8e925554eb4fdb55a91](https://testnet.etherscan.io/address/0x18feabc5f9437676143df8e925554eb4fdb55a91)
-Kovan (deployed March 6th, 2017): [0xcbe3bd8d93ae23ccc27f73afdeb40bb60f723ee9](https://kovan.testnet.io/address/0xcbe3bd8d93ae23ccc27f73afdeb40bb60f723ee9)
+Kovan (deployed March 8th, 2017): [0xe22fD893Eb285eA7c336158b54aC38f19E63491a](https://kovan.testnet.io/address/0xe22fD893Eb285eA7c336158b54aC38f19E63491a)
 
 Read the original [article](https://medium.com/@izqui9/ethereum-keybase-registry-proposal-c6497e3b2af7)
 
