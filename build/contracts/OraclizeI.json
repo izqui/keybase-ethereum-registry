@@ -109,6 +109,32 @@
           "type": "string"
         },
         {
+          "name": "_argN",
+          "type": "bytes"
+        }
+      ],
+      "name": "queryN",
+      "outputs": [
+        {
+          "name": "_id",
+          "type": "bytes32"
+        }
+      ],
+      "payable": true,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_timestamp",
+          "type": "uint256"
+        },
+        {
+          "name": "_datasource",
+          "type": "string"
+        },
+        {
           "name": "_arg1",
           "type": "string"
         },
@@ -204,6 +230,36 @@
       "constant": false,
       "inputs": [
         {
+          "name": "_timestamp",
+          "type": "uint256"
+        },
+        {
+          "name": "_datasource",
+          "type": "string"
+        },
+        {
+          "name": "_argN",
+          "type": "bytes"
+        },
+        {
+          "name": "_gaslimit",
+          "type": "uint256"
+        }
+      ],
+      "name": "queryN_withGasLimit",
+      "outputs": [
+        {
+          "name": "_id",
+          "type": "bytes32"
+        }
+      ],
+      "payable": true,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
           "name": "_gasPrice",
           "type": "uint256"
         }
@@ -212,9 +268,22 @@
       "outputs": [],
       "payable": false,
       "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_config",
+          "type": "bytes32"
+        }
+      ],
+      "name": "setConfig",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
     }
   ],
   "networks": {},
   "schema_version": "0.0.5",
-  "updated_at": 1488805893837
+  "updated_at": 1488986968899
 }
